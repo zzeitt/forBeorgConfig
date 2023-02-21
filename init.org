@@ -29,7 +29,6 @@ This is the initialization file for `beorg`.
         )
 #+end_src
 
-* TODO
 #+begin_src scheme
               (set! filter-min-chars 2) ;; 使中文单字搜索生效
               (filter-add "Top Priority" (lambda (item) (string=? (item-priority item) "A"))) ;; 任务过滤
