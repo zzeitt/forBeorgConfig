@@ -1,0 +1,12 @@
+# Ignore these files
+\#*#
+*.org
+*.org~
+
+# But not these files
+!init.org
+!README.org
+
+# ...even if they are in subdirectories
+
+# if the files to be tracked are in subdirectories
