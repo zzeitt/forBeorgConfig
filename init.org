@@ -30,16 +30,16 @@ This is the initialization file for `beorg`.
 #+end_src
 
 #+begin_src scheme
-              (set! filter-min-chars 2) ;; 使中文单字搜索生效
-              (filter-add "Top Priority" (lambda (item) (string=? (item-priority item) "A"))) ;; 任务过滤
-              (defvar org-todo-action-keywords '(
-                            "TODO°"
-                            "DOING"
-                            "STUCK")
-                "A list of keywords to use for TODO action states. If empty then the value entered on the Settings tab is used.")
-              (defvar org-todo-done-keywords '(
-                            "CANC."
-                            "FAIL."
-                            "DONE√")
-                "A list of keywords to use for TODO done states. If empty then the value entered on the Settings tab is used.")
+  (set! filter-min-chars 2) ;; 使中文单字搜索生效
+  (filter-add "Top Priority" (lambda (item) (string=? (item-priority item) "A"))) ;; 任务过滤
+  (defvar org-todo-action-keywords '(
+                "TODO°"
+                "DOING"
+                "STUCK")
+    "A list of keywords to use for TODO action states. If empty then the value entered on the Settings tab is used.")
+  (defvar org-todo-done-keywords '(
+                "CANC."
+                "FAIL."
+                "DONE√")
+    "A list of keywords to use for TODO done states. If empty then the value entered on the Settings tab is used.")
 #+end_src
