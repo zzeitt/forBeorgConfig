@@ -5,7 +5,6 @@ This is the initialization file for `beorg`.
 #+begin_src scheme
   (defvar ui-swap-item-swipe-direction #t "Whether the swipe direction on items in the agenda or TODO tab should be swapped. If #t then swiping left-to-right will show state change options rather than editing the item in the outliner.")
 #+end_src
-
 * Org mode
 #+begin_src scheme
   ;; -------------- 格式相关 -------------
@@ -31,7 +30,8 @@ This is the initialization file for `beorg`.
 
 #+begin_src scheme
   (set! filter-min-chars 2) ;; 使中文单字搜索生效
-  (filter-add "Top Priority" (lambda (item) (string=? (item-priority item) "A"))) ;; 任务过滤
+  (filter-add "Top Priority" (lambda (item) (string=? (item-priority item) "A"))) ;; A优先级任务  
+(filter-add "All stuffs" (lambda (item) (string=? (item-priority item) "A"))) ;;
   (defvar org-todo-action-keywords '(
                 "TODO°"
                 "DOING"
