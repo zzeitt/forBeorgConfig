@@ -1,1 +1,45 @@
-../init.org
+;; -*- coding: utf-8 -*-
+#+TITLE: init
+This is the initialization file for `beorg`.
+* UI
+#+begin_src scheme
+  (defvar ui-swap-item-swipe-direction #t "Whether the swipe direction on items in the agenda or TODO tab should be swapped. If #t then swiping left-to-right will show state change options rather than editing the item in the outliner.")
+#+end_src
+
+* Org mode
+#+begin_src scheme
+  ;; -------------- 格式相关 -------------
+  (defvar org-allow-math #t
+    "Allow MathJax to be used.")
+  (defvar org-log-done-transition #t)
+  (defvar org-tags-column -60)
+
+  ;; -------------- item editor quick action -------------
+  (define (zeit/schedule-at-today)
+    (set-current-item-scheduled! (current-date))
+    )
+  (define (zeit/schedule-for-tomorrow)
+    (set-current-item-scheduled! (date-adjust (current-date) 1 'days))
+    )
+
+  (set! item-editor-menu
+        '(("Schedule at today🌻" (zeit/schedule-at-today))
+          ("Schedule for tomorrow🌅" (zeit/schedule-for-tomorrow))
+          )
+        )
+#+end_src
+
+#+begin_src scheme
+              (set! filter-min-chars 2) ;; 使中文单字搜索生效
+              (filter-add "Top Priority" (lambda (item) (string=? (item-priority item) "A"))) ;; 任务过滤
+              (defvar org-todo-action-keywords '(
+                            "TODO°"
+                            "DOING"
+                            "STUCK")
+                "A list of keywords to use for TODO action states. If empty then the value entered on the Settings tab is used.")
+              (defvar org-todo-done-keywords '(
+                            "CANC."
+                            "FAIL."
+                            "DONE√")
+                "A list of keywords to use for TODO done states. If empty then the value entered on the Settings tab is used.")
+#+end_src
