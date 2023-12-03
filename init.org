@@ -1,52 +1,145 @@
-;; -*- coding: utf-8 -*-
-#+TITLE: init
-This is the initialization file for `beorg`.
-* UI
-#+begin_src scheme
-  (defvar ui-swap-item-swipe-direction #t "Whether the swipe direction on items in the agenda or TODO tab should be swapped. If #t then swiping left-to-right will show state change options rather than editing the item in the outliner.")
-#+end_src
-
-* Formatting
-#+begin_src scheme
-  ;; -------------- 格式相关 -------------
-  (defvar org-allow-math #t
-    "Allow MathJax to be used.")
-  (defvar org-log-done-transition #t)
-  (defvar org-tags-column -60)
-
-  ;; -------------- item editor quick action -------------
-  (define (zeit/schedule-at-today)
-    (set-current-item-scheduled! (current-date))
-    )
-  (define (zeit/schedule-for-tomorrow)
-    (set-current-item-scheduled! (date-adjust (current-date) 1 'days))
-    )
-
-  (set! item-editor-menu
-        '(("Schedule at today🌻" (zeit/schedule-at-today))
-          ("Schedule for tomorrow🌅" (zeit/schedule-for-tomorrow))
-          )
-        )
-#+end_src
-
+;; -*- coding: utf-8 -*
+* Badge
+#+BEGIN_SRC scheme
+  (set! badge-filter
+      "f stuff f work f life f yakusoku f habit s TODO° o k")
+#+END_SRC
+* Agenda
+#+BEGIN_SRC scheme
+  (set! agenda-exclude-files '(
+      "film.org"
+      "geek.org"
+      "learn.org"
+      "hello.org"))
+#+END_SRC
+* Font
+#+BEGIN_SRC scheme
+  (defvar outliner-headline-font "Sarasa Fixed SC 17")
+  (defvar outliner-notes-font "Sarasa Fixed SC 17")
+  (defvar ui-font "Sarasa Fixed SC 17")
+#+END_SRC
 * Todo Keywords
 #+begin_src scheme
-  (set! filter-min-chars 2) ;; 使中文单字搜索生效
-  (filter-add "Top Priority" (lambda (item) (string=? (item-priority item) "A"))) ;; A优先级任务  
-(filter-add "All stuffs" (lambda (item) (string=? (item-priority item) "A"))) ;;
   (defvar org-todo-action-keywords '(
                 "TODO°"
                 "DOING"
-                "STUCK")
+                "STUCK"
+                "AWAIT"
+                )
     "A list of keywords to use for TODO action states. If empty then the value entered on the Settings tab is used.")
   (defvar org-todo-done-keywords '(
                 "CANC."
                 "FAIL."
-                "DONE√")
+                "DONE√"
+                )
     "A list of keywords to use for TODO done states. If empty then the value entered on the Settings tab is used.")
 #+end_src
+* Todo UI
+#+begin_src scheme
+  (defvar outliner-state-todo-color "#dc752e"
+    "The color to use for a TODO state")
+  (defvar outliner-state-done-color "#59aa00"
+    "The color to use for a DONE state")
+#+end_src
+* Filters
+#+begin_src scheme
+    (set! filter-min-chars 2) ;; 使中文单字搜索生效
+    (filter-add "Top Priority" (lambda (item) (string=? (item-priority item) "A"))) ;; A优先级任务
+    (filter-add "All stuffs" (lambda (item) (string=? (item-file item) "stuff.org"))) ;; stuff.org
+    (filter-add "All films" (lambda (item) (string=? (item-file item) "film.org"))) ;; film.org
+    (filter-add "All anniversaries" (lambda (item) (memq "anniversary" (item-tags item))))
+    (filter-add "All works" (lambda (item) (and (string=? (item-file item) "work.org")
+                                                (string=? (item-state item) "TODO°"))))
+#+end_src
+* Subfolder Support
+#+begin_src scheme
+  (set! sync-subfolders #t)
+#+end_src
+* Capture Template
+#+begin_src scheme
+  ;; List of pairs, first item in pair is template name followed by template definition. Templates can also be defined using a beorg extension.
+  ;; Here is an example (https://appsonthemove.freshdesk.com/support/discussions/topics/14000015064):
+  ;;   s TODO p A f tasks sch 1 t Christmas t Shopping h 2019 h "To Buy"
+  ;; This is a template which creates a new task with the state TODO, priority A, in the file tasks, with a scheduled date of tomorrow, the tags Christmas and Shopping, filed under 2019 > To Buy
 
-* Subfolder support
+  (set! item-templates
+      '(
+        ;;; Quick TODO - schedule for today, don't prompt for notes
+        ;; ("QTODO"
+        ;;  "s TODO f gtd.org sch 0 h Shortterm n \"Captured: [%now%]\"")
+
+        ;; ;;; Personal TODO - don't schedule but prompt for notes immediately
+        ;; ("Personal TODO"
+        ;;  "s TODO f gtd.org h Personal n \"Captured: [%now%]\" e")
+
+        ;; ;;; Emacs TODO - like a personal TODO but filed under the Emacs subtree
+        ;; ("Emacs TODO"
+        ;;  "s TODO f gtd.org h Emacs n \"Captured: [%now%]\" e")
+
+        ;; ;;; Book - quick capture a book recommendation
+        ;; ("Book"
+        ;;  "s UPCOMING f lists.org h Books n \"Captured: [%now%]\nAuthor(s):\nGist:\nSource:\" e")
+
+        ;; ;;; Movie - quick capture a movie recommendation
+        ;; ("Movie"
+        ;;  "s UPCOMING f lists.org h Movies n \"Captured: [%now%]\nGist:\nSource:\" e")
+
+        ;; ;;; Restaurant - quick capture a restaurant recommendation
+        ;; ("Restaurant"
+        ;;  "s UPCOMING f lists.org h Restaurants n \"Captured: [%now%]\nRecommended Dishes:\nSource:\" e")
+
+        ;; ;;; TV Show - quick capture a tv show recommendation
+        ;; ("TV Show"
+        ;;  "s UPCOMING f lists.org h \"TV Shows\" n \"Captured: [%now%]\nGist:\nSource:\" e")
+
+        ;; ;;; Game - quick capture a game recommendation
+        ;; ("Game"
+        ;;  "s UPCOMING f lists.org h Games n \"Captured: [%now%]\nGist:\nSource:\" e")
+
+        ("film • 真人电影"
+         "f film.org h \"真人电影\"")
+
+        ("film • 动漫"
+         "f film.org h \"动漫\" t anime")))
+
+  (defvar template-allow-spec-in-url-scheme #t "If #t then the template parameter in the capture URL scheme can specify the template parameters and not just an existing template")
+
+#+end_src
+* Long Press
 #+BEGIN_SRC scheme
-(set! sync-subfolders #t)
+
+(define (make-current-item-top-priority-today)
+  (begin (set-current-item-scheduled! (current-date))
+         (set-current-item-priority! "A")))
+(define (schedule-current-item-for-tomorrow)
+  (set-current-item-scheduled! (date-adjust (current-date) 1 'days)))
+(define (schedule-current-item-for-today)
+  (set-current-item-scheduled! (date-adjust (current-date) 0 'days)))
+(defvar item-longpress-menu
+  '(("Make top priority today" (make-current-item-top-priority-today))
+    ("Schedule for today" (schedule-current-item-for-today))
+    ("Schedule for tomorrow" (schedule-current-item-for-tomorrow)))
+  "The items defined here are shown when long-pressing an item on the Agenda or Tasks tab.")
 #+END_SRC
+* About How to Load Files
+https://appsonthemove.freshdesk.com/support/discussions/topics/14000019839
+* CSS Tests
+#+begin_src css
+  #002b36
+  #073642
+  #586e75
+  #657b83
+  #839496
+  #93a1a1
+  #eee8d5
+  #fdf6e3
+  #b58900
+  #cb4b16
+  #dc322f
+  #d33682
+  #6c71c4
+  #268bd2
+  #2aa198
+  #859900
+#+end_src
+*
