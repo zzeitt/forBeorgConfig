@@ -47,9 +47,15 @@
     (filter-add "Top Priority" (lambda (item) (string=? (item-priority item) "A"))) ;; A优先级任务
     (filter-add "All stuffs" (lambda (item) (string=? (item-file item) "stuff.org"))) ;; stuff.org
     (filter-add "All films" (lambda (item) (string=? (item-file item) "film.org"))) ;; film.org
+    (filter-add "All wishes" (lambda (item) (string=? (item-file item) "wish.org"))) ;; wish.org
     (filter-add "All anniversaries" (lambda (item) (memq "anniversary" (item-tags item))))
     (filter-add "All works" (lambda (item) (and (string=? (item-file item) "work.org")
-                                                (string=? (item-state item) "TODO°"))))
+                                          (string=? (item-state item) "TODO°"))))
+
+    (filter-add "All lifes" (lambda (item) (string=? (item-file item) "life.org"))) ;; life.org
+
+    (filter-add "All journeys" (lambda (item) (memq "journey" (item-tags item))))
+
 #+end_src
 * Subfolder Support
 #+begin_src scheme
