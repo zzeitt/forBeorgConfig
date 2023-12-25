@@ -117,14 +117,19 @@
 (define (make-current-item-top-priority-today)
   (begin (set-current-item-scheduled! (current-date))
          (set-current-item-priority! "A")))
+
 (define (schedule-current-item-for-tomorrow)
   (set-current-item-scheduled! (date-adjust (current-date) 1 'days)))
-(define (schedule-current-item-for-today)
-  (set-current-item-scheduled! (date-adjust (current-date) 0 'days)))
+
+(define (schedule-current-item-for-next-week)
+  (set-current-item-scheduled! (date-adjust (current-date) 1 'weeks)))
+
 (defvar item-longpress-menu
   '(("Make top priority today" (make-current-item-top-priority-today))
-    ("Schedule for today" (schedule-current-item-for-today))
-    ("Schedule for tomorrow" (schedule-current-item-for-tomorrow)))
+    ("Schedule for tomorrow" (schedule-current-item-for-tomorrow))
+    ("Schedule for next week" (schedule-current-item-for-next-week))
+
+)
   "The items defined here are shown when long-pressing an item on the Agenda or Tasks tab.")
 #+END_SRC
 * About How to Load Files
