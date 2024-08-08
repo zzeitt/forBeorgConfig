@@ -2,7 +2,7 @@
 * Badge
 #+BEGIN_SRC scheme
   (set! badge-filter
-      "f stuff f work f life f yakusoku f habit s TODO° o k")
+      "f thing f work f life f yakusoku f habit s TODO° o k")
 #+END_SRC
 * Agenda
 #+BEGIN_SRC scheme
@@ -28,9 +28,9 @@
                 )
     "A list of keywords to use for TODO action states. If empty then the value entered on the Settings tab is used.")
   (defvar org-todo-done-keywords '(
+                "DONE√"
                 "CANC."
                 "FAIL."
-                "DONE√"
                 )
     "A list of keywords to use for TODO done states. If empty then the value entered on the Settings tab is used.")
 #+end_src
@@ -45,7 +45,7 @@
 #+begin_src scheme
     (set! filter-min-chars 2) ;; 使中文单字搜索生效
     (filter-add "Top Priority" (lambda (item) (string=? (item-priority item) "A"))) ;; A优先级任务
-    (filter-add "All stuffs" (lambda (item) (string=? (item-file item) "stuff.org"))) ;; stuff.org
+    (filter-add "All thing" (lambda (item) (string=? (item-file item) "thing.org"))) ;; thing.org
     (filter-add "All films" (lambda (item) (string=? (item-file item) "film.org"))) ;; film.org
     (filter-add "All wishes" (lambda (item) (string=? (item-file item) "wish.org"))) ;; wish.org
     (filter-add "All anniversaries" (lambda (item) (memq "anniversary" (item-tags item))))
@@ -53,6 +53,10 @@
                                           (string=? (item-state item) "TODO°"))))
 
     (filter-add "All lifes" (lambda (item) (string=? (item-file item) "life.org"))) ;; life.org
+
+    (filter-add "All geeks" (lambda (item) (string=? (item-file item) "geek.org"))) ;; geek.org
+
+    (filter-add "All habits" (lambda (item) (string=? (item-file item) "habit.org"))) ;; habit.org
 
     (filter-add "All journeys" (lambda (item) (memq "journey" (item-tags item))))
 
@@ -114,20 +118,19 @@
 * Long Press
 #+BEGIN_SRC scheme
 
-(define (make-current-item-top-priority-today)
-  (begin (set-current-item-scheduled! (current-date))
-         (set-current-item-priority! "A")))
+(define (make-current-item-top-priority)
+  (begin (set-current-item-priority! "A")))
 
 (define (schedule-current-item-for-tomorrow)
   (set-current-item-scheduled! (date-adjust (current-date) 1 'days)))
 
 (define (schedule-current-item-for-next-week)
-  (set-current-item-scheduled! (date-adjust (current-date) 1 'weeks)))
+  (set-current-item-scheduled! (date-adjust (current-date) 7 'days)))
 
 (defvar item-longpress-menu
-  '(("Make top priority today" (make-current-item-top-priority-today))
-    ("Schedule for tomorrow" (schedule-current-item-for-tomorrow))
-    ("Schedule for next week" (schedule-current-item-for-next-week))
+  '(("🅰️Make top priority" (make-current-item-top-priority))
+    ("☀️Schedule for tomorrow" (schedule-current-item-for-tomorrow))
+    ("🗓️Schedule for next week" (schedule-current-item-for-next-week))
 
 )
   "The items defined here are shown when long-pressing an item on the Agenda or Tasks tab.")
