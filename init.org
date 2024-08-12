@@ -2,7 +2,7 @@
 * Badge
 #+BEGIN_SRC scheme
   (set! badge-filter
-      "f thing f work f life f yakusoku f habit s TODO° o k")
+      "f thing f work f life f yakusoku s TODO° o k")
 #+END_SRC
 * Agenda
 #+BEGIN_SRC scheme
@@ -10,6 +10,7 @@
       "film.org"
       "geek.org"
       "learn.org"
+      "archive.org"
       "hello.org"))
 #+END_SRC
 * Font
@@ -55,8 +56,6 @@
     (filter-add "All lifes" (lambda (item) (string=? (item-file item) "life.org"))) ;; life.org
 
     (filter-add "All geeks" (lambda (item) (string=? (item-file item) "geek.org"))) ;; geek.org
-
-    (filter-add "All habits" (lambda (item) (string=? (item-file item) "habit.org"))) ;; habit.org
 
     (filter-add "All journeys" (lambda (item) (memq "journey" (item-tags item))))
 
