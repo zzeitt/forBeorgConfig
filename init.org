@@ -11,7 +11,8 @@
       "geek.org"
       "learn.org"
       "archive.org"
-      "hello.org"))
+      "hello.org"
+      "reminders.org"))
 #+END_SRC
 * Font
 #+BEGIN_SRC scheme
@@ -42,11 +43,12 @@
   (defvar outliner-state-done-color "#59aa00"
     "The color to use for a DONE state")
 #+end_src
-* Filters
+* Filters(Task Gather)
 #+begin_src scheme
     (set! filter-min-chars 2) ;; 使中文单字搜索生效
     (filter-add "Top Priority" (lambda (item) (string=? (item-priority item) "A"))) ;; A优先级任务
     (filter-add "All thing" (lambda (item) (string=? (item-file item) "thing.org"))) ;; thing.org
+    (filter-add "All to learn" (lambda (item) (string=? (item-file item) "learn.org"))) ;; learn.org
     (filter-add "All films" (lambda (item) (string=? (item-file item) "film.org"))) ;; film.org
     (filter-add "All wishes" (lambda (item) (string=? (item-file item) "wish.org"))) ;; wish.org
     (filter-add "All anniversaries" (lambda (item) (memq "anniversary" (item-tags item))))
@@ -133,6 +135,12 @@
 
 )
   "The items defined here are shown when long-pressing an item on the Agenda or Tasks tab.")
+#+END_SRC
+
+* Reminders
+#+BEGIN_SRC scheme
+  (set! reminders-to-file-readonly #f)
+  (set! reminders-header-text "#+TITLE: reminders")
 #+END_SRC
 * About How to Load Files
 https://appsonthemove.freshdesk.com/support/discussions/topics/14000019839
