@@ -2,7 +2,7 @@
 * Badge
 #+BEGIN_SRC scheme
   (set! badge-filter
-      "f thing f work f life f yakusoku s TODO° o k")
+      "f thing f work f life s TODO° o k")
 #+END_SRC
 * Agenda
 #+BEGIN_SRC scheme
@@ -54,6 +54,7 @@
     (filter-add "All anniversaries" (lambda (item) (memq "anniversary" (item-tags item))))
     (filter-add "All works" (lambda (item) (and (string=? (item-file item) "work.org")
                                           (string=? (item-state item) "TODO°"))))
+    (filter-add "All wlogs" (lambda (item) (string=? (item-file item) "wlog.org"))) ;; wlog.org
 
     (filter-add "All lifes" (lambda (item) (string=? (item-file item) "life.org"))) ;; life.org
 
@@ -163,4 +164,5 @@ https://appsonthemove.freshdesk.com/support/discussions/topics/14000019839
   #2aa198
   #859900
 #+end_src
-*
+* URL Scheme
+- [[https://appsonthemove.freshdesk.com/support/solutions/articles/14000072617-url-scheme][URL scheme : Apps On The Move]]
